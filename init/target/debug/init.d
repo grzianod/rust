@@ -1,0 +1,1 @@
+/Users/grazianodinocca/Documents/PoliTO/LM32\ -\ Cybersecurity/Programmazione\ di\ Sistema/rust/init/target/debug/init: /Users/grazianodinocca/Documents/PoliTO/LM32\ -\ Cybersecurity/Programmazione\ di\ Sistema/rust/init/src/main.rs
