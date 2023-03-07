@@ -1,4 +1,5 @@
 fn main() {
-    let s: &'static str = "Graziano";
-    println!("Hello {}!", s);
+    let name :&'static str = "Graziano";
+    println!("Hello {}!", name);
+
 }
