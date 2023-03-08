@@ -1,3 +1,5 @@
+#[derive(Debug)]
+
 struct Test(i32);
 impl Drop for Test {    //drop è un tratto distruttore che il compilatore invoca prima di rilasciare effettivamente lo spazio in memoria
     fn drop(&mut self) {
@@ -20,7 +22,8 @@ fn main() {
 
 
     /* Vec<T> & addresses sample */
-    let mut v: Vec<Test> = Vec::with_capacity(8);
+    // let mut v: Vec<Test> = Vec::with_capacity(8);
+    let mut v: Vec<Test> = Vec::new();
     println!("ptr: {:p}, capacity: {}, len: {}", v.as_ptr(), v.capacity(), v.len());
     v.push(Test(5));
     println!("ptr: {:p}, capacity: {}, len: {}", v.as_ptr(), v.capacity(), v.len());
@@ -35,10 +38,13 @@ fn main() {
     v.push(Test(23));
     println!("ptr: {:p}, capacity: {}, size: {}", v.as_ptr(), v.capacity(), v.len());
     println!("&v[0]: {:p}", &v[0]);
+    println!("Shrinking vector...");
     v.shrink_to_fit();
     println!("ptr: {:p}, capacity: {}, size: {}", v.as_ptr(), v.capacity(), v.len());
     println!("&v[0]: {:p}", &v[0]);
-    v.pop();
+    println!("Popping...");
+    v.pop(); //se il valore estratto fosse stato assegnato ad una variabile l'oggetto non verrebbe rimosso e distrutto dallo stack...
     println!("ptr: {:p}, capacity: {}, size: {}", v.as_ptr(), v.capacity(), v.len());
     println!("&v[0]: {:p}", &v[0]);
+    println!("Terminating... ");
 }
