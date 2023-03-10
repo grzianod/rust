@@ -3,8 +3,17 @@
 struct Test(i32);
 impl Drop for Test {    //drop è un tratto distruttore che il compilatore invoca prima di rilasciare effettivamente lo spazio in memoria
     fn drop(&mut self) {
-        println!("Destroying Test ({}) at address {:p}", self.0, self);
+        println!("Destroying Test ({}) @ {:p}", self.0, self);
     }
+}
+
+//fn alfa(t: Test) il possesso della variabile passa al parametro della funzione alfa11
+//fn alfa(t: &Test) verrebbe passato un riferimento senza possesso in sola lettura
+//fn alfa(t: &mut Test) verrebbe passato un riferimento senza possesso in scrittura
+fn alfa(t: &mut Test) {
+    println!("Invoked alfa() on Test({}) @ {:p}", t.0, t);
+    t.0 = t.0+1;
+    println!("Returning from alfa");
 }
 
 fn main() {
@@ -47,4 +56,11 @@ fn main() {
     println!("ptr: {:p}, capacity: {}, size: {}", v.as_ptr(), v.capacity(), v.len());
     println!("&v[0]: {:p}", &v[0]);
     println!("Terminating... ");
+
+    /* Movement samples */
+    let mut t = Test(12);
+    println!("Creating Test ({}) @ {:p}", t.0, &t);
+    alfa(&mut t); //alfa diviene il nuovo possessore di t il cui valore viene mosso nel parametro della funzione
+    println!("Ending...");
+
 }
