@@ -28,13 +28,18 @@ typedef struct {
             MessageStruct messages; };
 } ExportData;
 
+void export(ExportData *data, int n, FILE *fp) {
+    for(int i=0; i<n; i++)
+            fwrite(&data[i], sizeof(ExportData), 1, fp);
+}
+
 int main() {
     ExportData export_data_arr[100];
     srand(time(NULL)); // seed the random number generator with current time
 
     FILE *fp;
 
-    if((fp = fopen("export_data.bin", "wb+")) == NULL) {
+    if((fp = fopen("exported_data.bin", "wb+")) == NULL) {
         printf("Error opening file \"data.bin\".");
         exit(-1);
     }
@@ -72,8 +77,8 @@ int main() {
         export_data_arr[i] = export_data;
     }
 
-    for(int i=0; i<100; i++)
-            fwrite(&export_data_arr[i], sizeof(ExportData), 1, fp);
+    export(export_data_arr, 100, fp);
+
     fclose(fp);
     exit(0);
 }
