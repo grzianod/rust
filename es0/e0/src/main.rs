@@ -4,6 +4,7 @@ use std::fs::File;
 use std::io::{self, Read, Result};
 use bincode::{deserialize, serialize};
 use serde::{Deserialize, Serialize};
+use std::mem;
 
 ///     Program to convert legacy C data in Rust
 #[derive(Parser,  Debug)]
@@ -23,14 +24,14 @@ struct ValueStruct {    //size: 16 bytes
 }
 
 #[derive(Debug, Deserialize)]
-struct MValueStruct {   //size: 52 bytes
+struct MValueStruct {   //size: 56 bytes
     _type: i32,
     val: [ f32; 10 ],
     timestamp: i64,
 }
 
 #[derive(Debug, Deserialize)]
-struct MessageStruct {  //size: 25 bytes
+struct MessageStruct {  //size: 28 bytes
     _type: i32,
     message: [u8; 21],
 }
@@ -43,24 +44,42 @@ enum ValueUnion {
 }
 
 #[derive(Debug, Deserialize)]
-struct CData {  //size: 52 bytes
+struct CData {  //size: 64 bytes
     type_: i32,
     value_union: ValueUnion,
 }
 
 impl CData {
-    fn from_bytes(bytes: &[u8]) -> Option<CData> {
-        if bytes.len
+    fn from_file(mut file: File) -> Result<Vec<CData>> {
+        let mut buffer = [0u8; 64];
+        let mut result = Vec::with_capacity(100);
+        for _ in 0..100 {
+            file.read_exact(&mut buffer)?;
+            let cdata: CData = bincode::deserialize(&buffer).unwrap();
+            result.push(cdata);
+        }
+        Ok(result)
+    }
+
+    fn print_data(data: Vec<CData>) {
+        for i in 0..100 {
+            println!("{:?}", data[i]);
+        }
     }
 }
 
-fn main() -> io::Result<()> {
+fn main() -> Result<()> {
+    let size = mem::size_of::<CData>();
+    println!("sizeof(CData) = {}", size);
     let args = Args::parse();
-    println!("{}", args.file);
     let mut file = File::open(args.file)?;
-    let mut buffer = Vec::new();
-    file.read_to_end(&mut buffer)?;
-    let decoded:CData = bincode::deserialize(&buffer).unwrap();
-    println!("Struttura letta dal file: {:?}", decoded);
+    match CData::from_file(file) {
+        Ok(data) => {
+            CData::print_data(data);
+        }
+        Err(error) => {
+            println!("Error reading data from file\n");
+        }
+    }
     Ok(())
 }

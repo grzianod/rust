@@ -1,7 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <time.h>
-#include <string.h>
 
 typedef struct {
     int type;
@@ -35,9 +33,17 @@ int main() {
         return -1;
     }
 
+    printf("sizeof(ValueStruct)   = %2lu\n", sizeof(ValueStruct));
+    printf("sizeof(MValueStruct)  = %2lu\n", sizeof(MValueStruct));
+    printf("sizeof(MessageStruct) = %2lu\n", sizeof(MessageStruct));
+    printf("sizeof(ExportData)    = %2lu\n", sizeof(ExportData));
+
     ExportData exportData[100];
     for(int i=0; i<100; i++) {
-        fread(&exportData[i], sizeof(ExportData), 1, fp);
+        if((fread(&exportData[i], sizeof(ExportData), 1, fp)) < 0) {
+            printf("Error reading from file...");
+            return -2;
+        }
         switch(exportData[i].type) {
             case 1:     printf("%02d: ValueStruct(%d, %f, %ld)\n", i+1, exportData[i].val.type, exportData[i].val.val, exportData[i].val.timestamp);
                         break;
@@ -45,8 +51,11 @@ int main() {
                         break;
             case 3:     printf("%02d: MessageStruct(%d, \"%s\")\n", i+1, exportData[i].messages.type, exportData[i].messages.message);
                         break;
-            default: printf("This will cause PANIC in Rust!");
+            default:    printf("Error reading element %d\n", i+1);
+                        return -3;
         }
     }
+
+    printf("Legacy data has been stored successfully!\n");
     return 0;
 }
