@@ -2,8 +2,10 @@
 <module type="CPP_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/es0/e0/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/init/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/init/target" />
+      <excludeFolder url="file://$MODULE_DIR$/es0/e0/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
