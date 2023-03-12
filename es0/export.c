@@ -88,7 +88,7 @@ int main() {
                 export_data.messages.type = type;
                 char *message = strings[(int) (rand() % 20)];
                 int len = strlen(message);
-                strncpy(export_data.messages.message, strings[(int) (rand() % 20)], len);
+                strncpy(export_data.messages.message, message, len);
                 export_data.messages.message[len] = '\0';
                 break;
         }
