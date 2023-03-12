@@ -16,21 +16,21 @@ file:  String,
 }
 
 #[derive(Debug, Deserialize)]
-struct ValueStruct {
+struct ValueStruct {    //size: 16 bytes
     _type: i32,
     val: f32,
     timestamp: i64,
 }
 
 #[derive(Debug, Deserialize)]
-struct MValueStruct {
+struct MValueStruct {   //size: 52 bytes
     _type: i32,
     val: [ f32; 10 ],
     timestamp: i64,
 }
 
 #[derive(Debug, Deserialize)]
-struct MessageStruct {
+struct MessageStruct {  //size: 25 bytes
     _type: i32,
     message: [u8; 21],
 }
@@ -43,11 +43,16 @@ enum ValueUnion {
 }
 
 #[derive(Debug, Deserialize)]
-struct CData {
+struct CData {  //size: 52 bytes
     type_: i32,
     value_union: ValueUnion,
 }
 
+impl CData {
+    fn from_bytes(bytes: &[u8]) -> Option<CData> {
+        if bytes.len
+    }
+}
 
 fn main() -> io::Result<()> {
     let args = Args::parse();
@@ -55,7 +60,7 @@ fn main() -> io::Result<()> {
     let mut file = File::open(args.file)?;
     let mut buffer = Vec::new();
     file.read_to_end(&mut buffer)?;
-    let decoded :CData = bincode::deserialize(&buffer).unwrap();
+    let decoded:CData = bincode::deserialize(&buffer).unwrap();
     println!("Struttura letta dal file: {:?}", decoded);
     Ok(())
 }
