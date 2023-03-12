@@ -45,7 +45,7 @@ enum ValueUnion {
 
 #[derive(Debug, Deserialize)]
 struct CData {  //size: 64 bytes
-    type_: i32,
+    _type: i32,
     value_union: ValueUnion,
 }
 
@@ -55,7 +55,7 @@ impl CData {
         let mut result = Vec::with_capacity(100);
         for _ in 0..100 {
             file.read_exact(&mut buffer)?;
-            let cdata: CData = bincode::deserialize(&buffer).unwrap();
+            let cdata = bincode::deserialize(&buffer).unwrap();
             result.push(cdata);
         }
         Ok(result)
